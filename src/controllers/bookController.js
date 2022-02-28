@@ -7,10 +7,26 @@ const createBook= async function (req, res) {
     res.send({msg: savedData})
 }
 
-const getBooksData= async function (req, res) {
-    let allBooks= await BookModel.find(  { authorName : "SK" , isPublished: true }  )
+const bookList= async function (req, res) {
+    let allBooks= await BookModel.find().select({bookName:"Thermo",authorName:"PK",_id:0})
     res.send({msg: allBooks})
 }
+const getBooksInYear= async function(req,res){
+    let year=req.query.page
+    let isTheYear= await BookModel.find({yearNumber: year})
+    res.send({msg:isTheYear})
+}
+
+const getXINRBooks = async function(req,res){
+    let bookPrice = await BookModel.find({
+        indianPrice:{$in: [ 100,200,700]}
+    })
+    res.send(bookPrice)
+
+}
+
 
 module.exports.createBook= createBook
-module.exports.getBooksData= getBooksData
+module.exports.bookList= bookList
+module.exports.getBooksInYear=getBooksInYear
+module.exports.getXINRBooks=getXINRBooks
