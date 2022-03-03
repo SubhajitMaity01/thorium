@@ -1,9 +1,10 @@
 const { count } = require("console")
+const res = require("express/lib/response")
 const authorModel = require("../models/authorModel")
 const bookModel= require("../models/bookModel")
 const publisherModel = require("../models/publisherModel")
 
-const createBook= async function (req, res) {
+const createBooks= async function (req, res) {
     let book = req.body
     let authorId = book.author
     let publisherId = book.publisher
@@ -32,5 +33,37 @@ const getBooks= async function (req, res) {
 }
 
 
-module.exports.createBook= createBook
+const findbooks=async function(req,res){
+    let publisherId = await publisherModel.find({publisherName:{$in:["Penguin","HarperCollins"]}}).select({_id:1})
+    let arr=[];
+    arr=publisherId.map(x=>x._id)
+
+    let data = await bookModel.updateMany(
+        {publisher:{$in:arr}},
+        {$set:{isHardCover:true}},
+        {new:true})
+        res.send(data)
+        
+        
+
+    res.send({data:newbooks})
+}
+
+const upDateBookByRating = async function(req,req){
+    let publisherId = await publisherModel.find({publisherName:{$in:["Penguin","HarperCollins"]}}).select({_id:1})
+    let arr=[]
+    console.log(arr)
+    arr = publisherId.map(x=>x_id)
+    let data=await bookModel.find({publisher:{$in:arr}}).updateMany({ratings:{$gt:3.5}},{$inc:{price:+10}},
+        {new:true})
+        res.send(data)
+
+
+}
+
+
+
+module.exports.createBooks= createBooks
 module.exports.getBooks= getBooks
+module.exports.findbooks=findbooks
+module.exports.upDateBookByRating=upDateBookByRating
