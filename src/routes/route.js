@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController= require("../controllers/userController")
+const auth=require("../middleware/auth")
 
 router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
@@ -16,5 +17,9 @@ router.get("/users/:userId", userController.getUserData)
 router.put("/users/:userId", userController.updateUser)
 
 router.delete("/user/:userId",userController.deleteUser)
+
+router.get("/users/:userId",auth.middleware1, userController.updateUser)
+
+
 
 module.exports = router;
