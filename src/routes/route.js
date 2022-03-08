@@ -30,4 +30,4 @@ router.get("/getUser",OrderController.middleware2,OrderController.createOrder)
 
 
 
-module.exports = router
+module.exports = router;
